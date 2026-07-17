@@ -30,7 +30,7 @@ template:
  spec:
    containers:
       - name: mongodb
-        image: vikasarisela/mongodb
+        image: vikasae/mongodb:v1
         readinessProbe:
           tcpSocket:
             port: 27017
