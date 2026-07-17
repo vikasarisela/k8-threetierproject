@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql
+  namespace: roboshop
+data:
+  my.cnf: |
+    [mysqld]
+    innodb_redo_log_capacity = 2G
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mysql
+  namespace: threetierapp
+  labels:
+    project: threetierapp
+    component: mysql
+    tier: db
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      project: threetierapp
+      component: mysql
+      tier: db
+
+  template:
+    metadata:
+      labels:
+        project: threetierapp
+        component: mysql
+        tier: db
+
+    spec:
+      containers:
+      - name: mysql
+        image: vikasae/mysql:v1
+        readinessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        # mounting
+        volumeMounts:
+        - name: mysql-config
+          mountPath: /etc/mysql/conf.d/my.cnf
+          subPath: my.cnf
+    
+    # adding volume to pod 
+      volumes:
+      - name: mysql-config
+        configMap:
+          name: mysql
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: mysql
+
+spec:
+  selector:
+    project: threetierapp
+    component: mysql
+    tier: db
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
