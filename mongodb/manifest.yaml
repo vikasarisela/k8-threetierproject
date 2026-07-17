@@ -1,9 +1,10 @@
-apiVersion: v1/app
+apiVersion: apps/v1
 kind: Depoloyment
 
 metadata:
    name: mongodb
    namespace: threetierapp
+   # these labels used for replicaset
    labels:
      project: threetierapp
      componnent: mongodb
@@ -12,6 +13,7 @@ metadata:
 spec:
    replicaSet: 1
    selector:
+     # these leables are used to select pos
      matchlabels:
            project: threetierapp
            componnent: mongodb
@@ -19,13 +21,13 @@ spec:
 
 ---
 template:
-metadata:
+ metadata:
    labels:
      project: threetierapp
      componnent: mongodb
      tier: db
 
-spec:
+ spec:
    containers:
       - name: mongodb
         image: vikasarisela/mongodb
