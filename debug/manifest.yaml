@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+   name: Debug
+   namespace: threetierapp
+   labels: 
+      name: Debug
+      project: threetierapp
+
+spec:
+   containers:
+   - name: debug
+     image: vikasae/debug:v1
+     imagePullPolicy: Always
