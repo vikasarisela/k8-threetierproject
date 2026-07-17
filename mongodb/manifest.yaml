@@ -7,24 +7,23 @@ metadata:
    # these labels used for replicaset
    labels:
      project: threetierapp
-     componnent: mongodb
+     component: mongodb
      tier: db
 
 spec:
-   replicaSet: 1
+   replicas: 1
    selector:
      # these leables are used to select pos
-     matchlabels:
+     matchLabels:
            project: threetierapp
-           componnent: mongodb
+           component: mongodb
            tier: db
 
----
 template:
  metadata:
    labels:
      project: threetierapp
-     componnent: mongodb
+     component: mongodb
      tier: db
 
  spec:
@@ -53,7 +52,7 @@ metadata:
 spec:
   selector:
      project: threetierapp
-     componnent: mongodb
+     component: mongodb
      tier: db
   ports:
     - protocol: TCP
